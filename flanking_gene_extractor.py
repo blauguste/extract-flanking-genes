@@ -8,7 +8,7 @@ import sys
 def get_flanking_genes(ref_fn, feature_table, base_fn):
     goi = SeqIO.read(open(ref_fn, 'r'), 'genbank')
     
-    print("Parsing %s: %s...", (goi.id, goi.description))
+    print("Parsing %s: %s..." % (goi.id, goi.description))
 
     excel_fn = base_fn + '_flanking_gene_analysis.xlsx'
     igr_fn = base_fn + '_igrs.fa'
@@ -89,7 +89,7 @@ def get_flanking_genes(ref_fn, feature_table, base_fn):
                 break
 
         if not located_igr:
-            print("Hey! FYI, %s wasn't in an intergenic region!", soi_name)
+            print("Hey! FYI, %s wasn't in an intergenic region!" % soi_name)
     
     # Write the IGRs and flanking proteins to file
     
@@ -106,7 +106,6 @@ def get_flanking_genes(ref_fn, feature_table, base_fn):
     
     fg = pd.DataFrame.from_dict(soi_flank, orient='index')
     df = df.join(fg)
-    print(df)
 
     # Write the info about flanking seqs to file
 
