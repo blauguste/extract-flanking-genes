@@ -116,9 +116,9 @@ if __name__ == '__main__':
     if len(sys.argv) == 4:
          get_flanking_genes(sys.argv[1], sys.argv[2], sys.argv[3])
     else:
-         print("Usage: flanking_gene_extractor.py reference_genome.gb feature_table.csv basename_for_outfiles\n \\
-            Feature table should be in the format: seq_name, start, end, strand \n \\
-            Intended for use with seqs intergenic seqs of interest with up to 10bp overlap with flanking CDSs. \\
+         print("Usage: flanking_gene_extractor.py reference_genome.gb feature_table.csv basename_for_outfiles\n \
+            Feature table should be in the format: seq_name, start, end, strand \n \
+            Intended for use with seqs intergenic seqs of interest with up to 10bp overlap with flanking CDSs.\n \
             Start/end loci should correspond directly to the input reference genome!")
          sys.exit(0)
 
