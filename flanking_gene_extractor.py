@@ -13,7 +13,7 @@ def get_flanking_genes(ref_fn, feature_table, base_fn):
     excel_fn = base_fn + '_flanking_gene_analysis.xlsx'
     igr_fn = base_fn + '_igrs.fa'
     pseudo_fn = base_fn + '_flanking_pseudos.fa'
-    prot_fn = base_fn + '_flanking_cds.fa'
+    prot_fn = base_fn + '_flanking_cds.faa'
 
     # Throw all the CDS genes in a list
     cdsl = [f for f in goi.features if f.type == 'CDS']
