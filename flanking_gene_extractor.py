@@ -80,7 +80,13 @@ def get_flanking_genes(feature_table, base_fn, feat_name_field, gb_acc_field, em
 
                 soi_start = r['start']
                 soi_end = r['end']
-                soi_name = r[feat_name_field] + '_' + goi.id
+                soi_strand = r['strand']
+                soi_name = r[feat_name_field] + goi.id
+
+                soi_flank[soi_name] = {}
+                soi_flank[soi_name]['start'] = soi_start
+                soi_flank[soi_name]['end'] = soi_end
+                soi_flank[soi_name]['strand'] = soi_strand
 
                 for index, cds in enumerate(cdsl):
                     
@@ -93,11 +99,10 @@ def get_flanking_genes(feature_table, base_fn, feat_name_field, gb_acc_field, em
                     if soi_start >= (int(cds.location.end) - 10) and soi_end <= (int(next_.location.start) + 10):
                         print("IGR found.")
                         flank_cds = cdsl[index - 2: index + 4]
-                        soi_flank[soi_name] = {}
 
                         # Save the entire IGR seq
                         igr_id = goi.id + ':' + str(int(cds.location.end + 1)) + '-' + str(int(next_.location.start))
-                        igr_desc = soi_name + '_' + 'IGR'
+                        igr_desc = soi_name + '_IGR'
                         igr_seq = goi.seq[cds.location.end:next_.location.start]
                         igr_seqs.append(SeqRecord(igr_seq, id=igr_desc, description=igr_id))
                         
@@ -130,7 +135,6 @@ def get_flanking_genes(feature_table, base_fn, feat_name_field, gb_acc_field, em
                         
                         print("overlapping gene found.")
                         # Don't count the overlapping gene as part of the "flanking genes"
-                        soi_flank[soi_name] = {}
 
                         cinfo = get_gene_info(goi, cds)
                         if 'pseudo' in cds.qualifiers:
