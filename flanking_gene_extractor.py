@@ -47,6 +47,16 @@ def get_flanking_genes(feature_table, base_fn, feat_name_field, gb_acc_field, em
     # Load the table containing the coordinates and accessions for sRNAs of interest 
     df = pd.read_pickle(feature_table)
 
+    excel_fn = base_fn + '_flanking_gene_analysis.xlsx'
+    igr_fn = base_fn + '_igrs.fa'
+    pseudo_fn = base_fn + '_flanking_pseudos.fa'
+    prot_fn = base_fn + '_flanking_cds.faa'
+
+    soi_flank = {}
+    pseudos = []
+    igr_seqs = []
+    flanking_prot_seqs = []
+
     for a in df[gb_acc_field].unique():
         
         if os.path.isfile(a + '.gb'):
@@ -61,18 +71,8 @@ def get_flanking_genes(feature_table, base_fn, feat_name_field, gb_acc_field, em
 
             print("Parsing %s: %s..." % (goi.id, goi.description))
 
-            excel_fn = base_fn + '_flanking_gene_analysis.xlsx'
-            igr_fn = base_fn + '_igrs.fa'
-            pseudo_fn = base_fn + '_flanking_pseudos.fa'
-            prot_fn = base_fn + '_flanking_cds.faa'
-
             # Throw all the CDS genes in a list
             cdsl = [f for f in goi.features if f.type == 'CDS']
-
-            soi_flank = {}
-            pseudos = []
-            igr_seqs = []
-            flanking_prot_seqs = []
 
             for i, r in df[df[gb_acc_field] == a].iterrows():
                 
@@ -111,8 +111,7 @@ def get_flanking_genes(feature_table, base_fn, feat_name_field, gb_acc_field, em
                             pos = str(pos)
                             
                             # Add the gene name and gene product to the dictionary
-                            
-                            print(type(c))
+
                             cinfo = get_gene_info(goi, c)
 
                             if 'pseudo' in c.qualifiers:
@@ -191,11 +190,10 @@ def get_flanking_genes(feature_table, base_fn, feat_name_field, gb_acc_field, em
     # Join the input feature table to the gathered info
     
     fg = pd.DataFrame.from_dict(soi_flank, orient='index')
-    df = df.join(fg)
 
     # Write the info about flanking seqs to file
 
-    df.to_excel(excel_fn)
+    fg.to_excel(excel_fn)
 
 if __name__ == '__main__':
     if len(sys.argv) == 6:
